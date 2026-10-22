@@ -18,3 +18,19 @@ Windows x64 и macOS Intel проверяются облачным workflow
 на чистом GitHub runner. Для каждого ZIP проверяются настоящее распознавание,
 GUI и повторный запуск при `HF_HUB_OFFLINE=1`. Статус конкретного релиза
 определяется успешным запуском этого workflow, а не наличием этого файла.
+
+## v0.1.0
+
+- [x] Windows x64: 20 тестов, сборка EXE, распознавание, GUI, офлайн-запуск.
+- [x] macOS arm64: те же проверки готового `.app` на macOS 14.
+- [x] macOS Intel: те же проверки готового `.app` на macOS 15.
+- [x] Все три ZIP скачаны из CI: CRC, наличие executable, исходников FFmpeg
+  и лицензий Python/Tcl/Tk проверены; контрольные суммы опубликованы.
+
+Успешный CI: https://github.com/RuBAN-GT/mini-transcriber/actions/runs/39754049180
+Релиз: https://github.com/RuBAN-GT/mini-transcriber/releases/tag/v0.1.0
+
+Локально дополнительно проверены первый запуск с совершенно пустым HF-кэшем,
+32-секундная запись с реальной обработкой нескольких фрагментов и запуск
+Mac-приложения после распаковки ZIP (включая ad-hoc code signature).
+Developer ID-подпись и notarization не выполнялись.
