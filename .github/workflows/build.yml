@@ -36,6 +36,8 @@ jobs:
       HF_HUB_DISABLE_XET: '1'
       HF_HUB_DISABLE_SYMLINKS_WARNING: '1'
       HF_HUB_DISABLE_TELEMETRY: '1'
+      PYTHONUTF8: '1'
+      PYTHONIOENCODING: utf-8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -82,6 +84,13 @@ jobs:
         run: |
           mkdir -p release
           ditto -c -k --sequesterRsrc --keepParent dist/MiniTranscriber.app release/MiniTranscriber-${{ matrix.target }}.zip
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: diagnostics-${{ matrix.target }}
+          path: |
+            vendor/ffmpeg-source/*.log
+            build/MiniTranscriber/warn-*.txt
       - uses: actions/upload-artifact@v4
         with:
           name: MiniTranscriber-${{ matrix.target }}

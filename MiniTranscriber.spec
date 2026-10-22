@@ -1,6 +1,7 @@
 from pathlib import Path
 import platform
 import sys
+import sysconfig
 from PyInstaller.utils.hooks import collect_all, collect_entry_point, copy_metadata
 
 # Providers are loaded through importlib.metadata entry points, not static imports.
@@ -14,6 +15,15 @@ for package in ("transcribe_cpp", "transcribe_cpp_native"):
 for distribution in ("transcribe-cpp", "transcribe-cpp-native", "huggingface-hub", "tqdm"):
     datas += copy_metadata(distribution, recursive=True)
 datas += [("README.md", "."), ("THIRD_PARTY.md", ".")]
+datas += [("licenses", "licenses/runtime")]
+python_license = next((p for p in (
+    Path(sys.base_prefix) / "LICENSE.txt",
+    Path(sysconfig.get_path("stdlib")) / "LICENSE.txt",
+    Path(sys.base_prefix) / "Resources" / "English.lproj" / "License.rtf",
+) if p.is_file()), None)
+if python_license is None:
+    raise SystemExit("Python distribution license not found")
+datas += [(str(python_license), "licenses/python")]
 ffmpeg_name = "ffmpeg.exe" if sys.platform == "win32" else "ffmpeg"
 ffmpeg = Path("vendor/ffmpeg") / ffmpeg_name
 if not ffmpeg.is_file():
