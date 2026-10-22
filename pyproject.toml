@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mini-transcriber"
+version = "0.1.0"
+description = "A small local Windows and macOS audio/video transcriber."
+requires-python = ">=3.11"
+dependencies = [
+    "transcribe-cpp==0.2.3",
+    "transcribe-cpp-native==0.2.3",
+    "huggingface-hub>=0.26,<2",
+    "tqdm>=4.66,<5",
+]
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.11,<7"]
+
+[project.gui-scripts]
+mini-transcriber = "mini_transcriber.app:main"
+
+[tool.setuptools.packages.find]
+include = ["mini_transcriber*"]
