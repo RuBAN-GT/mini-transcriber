@@ -44,7 +44,7 @@ jobs:
         with:
           python-version: '3.11'
           architecture: ${{ matrix.arch }}
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: |
             vendor/ffmpeg
@@ -65,6 +65,14 @@ jobs:
       - name: Build LGPL FFmpeg (macOS)
         if: runner.os == 'macOS' && steps.ffmpeg-cache.outputs.cache-hit != 'true'
         run: bash scripts/build-ffmpeg.sh
+      - name: Save compiled FFmpeg
+        if: steps.ffmpeg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            vendor/ffmpeg
+            vendor/ffmpeg-source
+          key: ${{ steps.ffmpeg-cache.outputs.cache-primary-key }}
       - name: Build and verify Windows EXE
         if: runner.os == 'Windows'
         shell: pwsh

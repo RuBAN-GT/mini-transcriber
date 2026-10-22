@@ -11,7 +11,7 @@ function Invoke-Python {
     if ($LASTEXITCODE -ne 0) { throw "Python failed: $Arguments" }
 }
 
-Invoke-Python -m pip install '.[build]'
+Invoke-Python -m pip install -e '.[build]'
 Invoke-Python -m unittest discover -s tests -v
 # Verify the native DLL provider and bundled FFmpeg before freezing.
 Invoke-Python scripts/check-runtime.py
